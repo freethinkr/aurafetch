@@ -1,0 +1,25 @@
+  [94m           `.:/ossyyyysso/:.[0m                 [1m[94m │ [0m[94m▸[0m [94mKernel      [0m [97m6.17.0-14-generic[0m
+          .:oyyyyyyyyyyyyyyyyyyo:`[0m             [1m[94m │ [0m[94m▸[0m [94mUptime      [0m [97m28m[0m
+        -oyyyyyyyo[97mdMMy[94myyyyyyysyyyyo-[0m           [1m[94m │ [0m[94m▸[0m [94mPackages    [0m [97m2546 (dpkg), 8 (flatpak), 9 (snap)[0m
+      -syyyyyyyyyy[97mdMMy[94moyyyy[97mdmMMy[94myyyys-[0m         [1m[94m │ [0m[94m▸[0m [94mShell       [0m [97mbash 5.2.37[0m
+     oyyys[97mdMy[94msyyyy[97mdMMMMMMMMMMMMMy[94myyyyyyo[0m       [1m[94m │ [0m[94m▸[0m [94mInit        [0m [97msystemd[0m
+   `oyyyy[97mdMMMMy[94msyysoooooo[97mdMMMMy[94myyyyyyyyo`[0m     
+   oyyyyyy[97mdMMMMy[94myyyyyyyyyyys[97mdMMy[94msssssyyyo[0m     [1m[94m  ┌── ◇ DESKTOP ──────────────────────────────[0m
+  -yyyyyyyy[97mdMy[94msyyyyyyyyyyyyyys[97mdMMMMMy[94msyyy-[0m     [1m[94m │ [0m[94m▸[0m [94mDE          [0m [97mKDE[0m
+  oyyyysoo[97mdMy[94myyyyyyyyyyyyyyyyyy[97mdMMMMy[94msyyyo[0m     [1m[94m │ [0m[94m▸[0m [94mWM          [0m [97mkwin_wayland[0m
+  yyys[97mdMMMMMy[94myyyyyyyyyyyyyyyyyysosyyyyyyyy[0m     [1m[94m │ [0m[94m▸[0m [94mDisplay     [0m [97mwayland[0m
+  yyys[97mdMMMMMy[94myyyyyyyyyyyyyyyyyyyyyyyyyyyyy[0m     [1m[94m │ [0m[94m▸[0m [94mTheme       [0m [97mBreeze[0m
+  oyyyyysos[97mdy[94myyyyyyyyyyyyyyyyyy[97mdMMMMy[94msyyyo[0m     [1m[94m │ [0m[94m▸[0m [94mIcons       [0m [97mPapirus[0m
+  -yyyyyyyy[97mdMy[94msyyyyyyyyyyyyyys[97mdMMMMMy[94msyyy-[0m     [1m[94m │ [0m[94m▸[0m [94mTerminal    [0m [97mdumb[0m
+   oyyyyyy[97mdMMMy[94msyyyyyyyyyyys[97mdMMy[94moyyyoyyyo[0m     
+   `oyyyy[97mdMMMy[94msyyyoooooo[97mdMMMMy[94moyyyyyyyyo[0m      [1m[94m  ┌── ◆ HARDWARE ──────────────────────────────[0m
+     oyyysyyoyyyys[97mdMMMMMMMMMMMy[94myyyyyyyo[0m        [1m[94m │ [0m[94m▸[0m [94mCPU         [0m [97mIntel Core i5-4590S @ 3.00GHz (4)[0m
+      -syyyyyyyyy[97mdMMMy[94msyyy[97mdMMMy[94msyyyys-[0m         [1m[94m │ [0m[94m▸[0m [94mGPU         [0m [97mIntel Xeon E3-1200 v3/4th Gen Core Proc…[0m
+        -oyyyyyyy[97mdMMy[94myyyyyysosyyyyo-[0m           [1m[94m │ [0m[94m▸[0m [94mMemory      [0m [97m3.0 GiB / 7.6 GiB[0m
+          ./oyyyyyyyyyyyyyyyyyyo/.[0m             [1m[94m │ [0m[94m▸[0m [94mDisk        [0m [97m27G / 98G (29%)[0m
+             `.:/oosyyyysso/:.`[0m                [1m[94m │ [0m[94m▸[0m [94mResolution  [0m [97m1920x1080[0m
+                                              
+                                              [1m[94m  ┌── ◎ NETWORK ──────────────────────────────[0m
+                                               [1m[94m │ [0m[94m▸[0m [94mLocal IP    [0m [97m10.223.145.209[0m
+                                               [1m[94m │ [0m[94m▸[0m [94mInterface   [0m [97mwlx00c6a2241431 (Wi-Fi)[0m
+

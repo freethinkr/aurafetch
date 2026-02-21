@@ -55,7 +55,7 @@ load_config() {
     fi
 
     if [[ -n "$config_file" ]]; then
-        while IFS='=' read -r key val; do
+        while IFS='=' read -r key val || [[ -n "$key" ]]; do
             # Skip comments and empty lines
             [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
             key=$(echo "$key" | xargs)
