@@ -1,0 +1,255 @@
+#!/usr/bin/env bash
+# ╔═══════════════════════════════════════════════════════════╗
+# ║                     ✦ AURAFETCH ✦                         ║
+# ║         A beautiful system information fetcher            ║
+# ║              github.com/sourav/aurafetch                  ║
+# ╚═══════════════════════════════════════════════════════════╝
+
+AURAFETCH_VERSION="0.1.0"
+
+# ── Resolve script directory ─────────────────────────────────
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Check if lib is in the script dir or in /usr/share
+if [[ -d "${SCRIPT_DIR}/lib" ]]; then
+    LIB_DIR="${SCRIPT_DIR}/lib"
+    ASCII_DIR="${SCRIPT_DIR}/ascii"
+elif [[ -d "/usr/share/aurafetch/lib" ]]; then
+    LIB_DIR="/usr/share/aurafetch/lib"
+    ASCII_DIR="/usr/share/aurafetch/ascii"
+elif [[ -d "/usr/local/share/aurafetch/lib" ]]; then
+    LIB_DIR="/usr/local/share/aurafetch/lib"
+    ASCII_DIR="/usr/local/share/aurafetch/ascii"
+else
+    echo "Error: Cannot find aurafetch lib directory." >&2
+    exit 1
+fi
+
+# ── Source modules ───────────────────────────────────────────
+source "${LIB_DIR}/utils.sh"
+source "${LIB_DIR}/colors.sh"
+source "${LIB_DIR}/detect.sh"
+source "${LIB_DIR}/system.sh"
+source "${LIB_DIR}/desktop.sh"
+source "${LIB_DIR}/hardware.sh"
+source "${LIB_DIR}/network.sh"
+source "${LIB_DIR}/render.sh"
+
+# ── Default settings ────────────────────────────────────────
+SHOW_LOGO="true"
+LOGO_SMALL="false"
+LOGO_OVERRIDE=""
+SHOW_PUBLIC_IP="false"
+NO_COLOR="false"
+COMPACT="false"
+JSON_OUTPUT="false"
+
+# ── Load config file ────────────────────────────────────────
+load_config() {
+    local config_file=""
+    if [[ -f "$HOME/.config/aurafetch/aurafetch.conf" ]]; then
+        config_file="$HOME/.config/aurafetch/aurafetch.conf"
+    elif [[ -f "${SCRIPT_DIR}/config/aurafetch.conf" ]]; then
+        config_file="${SCRIPT_DIR}/config/aurafetch.conf"
+    fi
+
+    if [[ -n "$config_file" ]]; then
+        while IFS='=' read -r key val; do
+            # Skip comments and empty lines
+            [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
+            key=$(echo "$key" | xargs)
+            val=$(echo "$val" | xargs | tr -d '"' | tr -d "'")
+
+            case "$key" in
+                SHOW_PUBLIC_IP) SHOW_PUBLIC_IP="$val" ;;
+                LOGO_SIZE)      [[ "$val" == "small" ]] && LOGO_SMALL="true" ;;
+                LOGO_OVERRIDE)  LOGO_OVERRIDE="$val" ;;
+                COMPACT)        COMPACT="$val" ;;
+            esac
+        done < "$config_file"
+    fi
+}
+
+# ── Parse CLI arguments ──────────────────────────────────────
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --help|-h)
+                show_help
+                exit 0
+                ;;
+            --version|-v)
+                echo "aurafetch ${AURAFETCH_VERSION}"
+                exit 0
+                ;;
+            --logo)
+                LOGO_OVERRIDE="$2"
+                shift 2
+                ;;
+            --logo-small)
+                LOGO_SMALL="true"
+                shift
+                ;;
+            --no-logo)
+                SHOW_LOGO="false"
+                shift
+                ;;
+            --no-color)
+                NO_COLOR="true"
+                shift
+                ;;
+            --public-ip)
+                SHOW_PUBLIC_IP="true"
+                shift
+                ;;
+            --compact)
+                COMPACT="true"
+                shift
+                ;;
+            --json)
+                JSON_OUTPUT="true"
+                shift
+                ;;
+            --config)
+                if [[ -f "$2" ]]; then
+                    source "$2"
+                else
+                    echo "Error: Config file not found: $2" >&2
+                    exit 1
+                fi
+                shift 2
+                ;;
+            *)
+                echo "Unknown option: $1" >&2
+                echo "Run 'aurafetch --help' for usage information." >&2
+                exit 1
+                ;;
+        esac
+    done
+}
+
+# ── Help message ────────────────────────────────────────────
+show_help() {
+    echo -e ""
+    echo -e "  \033[1m✦ AURAFETCH v${AURAFETCH_VERSION}\033[0m — A beautiful system information fetcher"
+    echo -e ""
+    echo -e "  \033[1mUSAGE:\033[0m"
+    echo -e "    aurafetch [OPTIONS]"
+    echo -e ""
+    echo -e "  \033[1mOPTIONS:\033[0m"
+    echo -e "    --help, -h          Show this help message"
+    echo -e "    --version, -v       Show version number"
+    echo -e "    --logo <distro>     Override auto-detected distro logo"
+    echo -e "    --logo-small        Use small variant of the logo"
+    echo -e "    --no-logo           Hide the logo, show info only"
+    echo -e "    --no-color          Disable all colors"
+    echo -e "    --public-ip         Show public IP address (requires internet)"
+    echo -e "    --compact           Compact output mode"
+    echo -e "    --json              Output in JSON format"
+    echo -e "    --config <path>     Use a custom config file"
+    echo -e ""
+    echo -e "  \033[1mEXAMPLES:\033[0m"
+    echo -e "    aurafetch                     # Auto-detect everything"
+    echo -e "    aurafetch --logo arch         # Use Arch Linux logo"
+    echo -e "    aurafetch --no-logo           # Info only, no logo"
+    echo -e "    aurafetch --logo-small        # Use small logo variant"
+    echo -e "    aurafetch --public-ip         # Include public IP"
+    echo -e ""
+}
+
+# ── JSON output ──────────────────────────────────────────────
+output_json() {
+    cat <<EOF
+{
+  "os": "${INFO_OS}",
+  "kernel": "${INFO_KERNEL}",
+  "hostname": "${INFO_HOSTNAME}",
+  "uptime": "${INFO_UPTIME}",
+  "packages": "${INFO_PACKAGES}",
+  "shell": "${INFO_SHELL}",
+  "init": "${INFO_INIT}",
+  "user": "${INFO_USER}",
+  "de": "${INFO_DE}",
+  "wm": "${INFO_WM}",
+  "display_server": "${INFO_DISPLAY}",
+  "theme": "${INFO_THEME}",
+  "icons": "${INFO_ICONS}",
+  "terminal": "${INFO_TERMINAL}",
+  "cpu": "${INFO_CPU}",
+  "gpu": "${INFO_GPU}",
+  "memory": "${INFO_MEMORY}",
+  "disk": "${INFO_DISK}",
+  "battery": "${INFO_BATTERY}",
+  "resolution": "${INFO_RESOLUTION}",
+  "local_ip": "${INFO_LOCAL_IP}",
+  "interface": "${INFO_INTERFACE}",
+  "distro_id": "${DISTRO_ID}"
+}
+EOF
+}
+
+# ── Main ─────────────────────────────────────────────────────
+main() {
+    # Load config
+    load_config
+
+    # Parse command line
+    parse_args "$@"
+
+    # Disable colors if requested
+    if [[ "$NO_COLOR" == "true" ]]; then
+        RST="" BOLD="" DIM="" ITALIC="" UNDERLINE=""
+        C_BLACK="" C_RED="" C_GREEN="" C_YELLOW="" C_BLUE="" C_MAGENTA="" C_CYAN="" C_WHITE=""
+        C_BBLACK="" C_BRED="" C_BGREEN="" C_BYELLOW="" C_BBLUE="" C_BMAGENTA="" C_BCYAN="" C_BWHITE=""
+    fi
+
+    # Detect distro
+    DISTRO_ID=$(get_distro_id)
+    [[ -n "$LOGO_OVERRIDE" ]] && DISTRO_ID="$LOGO_OVERRIDE"
+
+    # Set theme colors based on distro
+    set_theme_colors "$DISTRO_ID"
+
+    # ── Collect all system information ────────────────────────
+    INFO_OS=$(get_os)
+    INFO_KERNEL=$(get_kernel)
+    INFO_HOSTNAME=$(get_hostname)
+    INFO_UPTIME=$(get_uptime)
+    INFO_PACKAGES=$(get_packages)
+    INFO_SHELL=$(get_shell)
+    INFO_INIT=$(get_init)
+    INFO_USER=$(get_user)
+
+    INFO_DE=$(get_de)
+    INFO_WM=$(get_wm)
+    INFO_DISPLAY=$(get_display_server)
+    INFO_THEME=$(get_theme)
+    INFO_ICONS=$(get_icons)
+    INFO_TERMINAL=$(get_terminal)
+
+    INFO_CPU=$(get_cpu)
+    INFO_GPU=$(get_gpu)
+    INFO_MEMORY=$(get_memory)
+    INFO_DISK=$(get_disk)
+    INFO_BATTERY=$(get_battery)
+    INFO_RESOLUTION=$(get_resolution)
+
+    INFO_LOCAL_IP=$(get_local_ip)
+    INFO_INTERFACE=$(get_interface)
+    [[ "$SHOW_PUBLIC_IP" == "true" ]] && INFO_PUBLIC_IP=$(get_public_ip) || INFO_PUBLIC_IP=""
+
+    # ── JSON mode ─────────────────────────────────────────────
+    if [[ "$JSON_OUTPUT" == "true" ]]; then
+        output_json
+        return
+    fi
+
+    # ── Find logo file ────────────────────────────────────────
+    local logo_file=""
+    logo_file=$(find_logo_file "$DISTRO_ID" "$ASCII_DIR" "$LOGO_SMALL")
+
+    # ── Render ────────────────────────────────────────────────
+    render_output "$logo_file" "$SHOW_LOGO"
+}
+
+main "$@"
