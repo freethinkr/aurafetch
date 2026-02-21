@@ -2,16 +2,37 @@
 # ── AuraFetch: OS/Distro Detection ──────────────────────────
 
 get_distro_id() {
-    if [[ -f /etc/os-release ]]; then
+    local os_release=""
+    # Check for Termux/Android path first or fallback to standard Linux path
+    if [[ -f /data/data/com.termux/files/usr/etc/os-release ]]; then
+        os_release="/data/data/com.termux/files/usr/etc/os-release"
+    elif [[ -f /etc/os-release ]]; then
+        os_release="/etc/os-release"
+    fi
+
+    if [[ -n "$os_release" ]]; then
         local id=""
-        while IFS='=' read -r key val; do
+        # `|| [[ -n "$key" ]]` ensures the last line is read even without a trailing newline
+        while IFS='=' read -r key val || [[ -n "$key" ]]; do
             val="${val%\"}"
             val="${val#\"}"
+            val="${val//$'\r'/}"
             [[ "$key" == "ID" ]] && id="$val"
-        done < /etc/os-release
+        done < "$os_release"
+        
+        # In case the ID is termux, we map it to android
+        if [[ "$id" == "termux" ]]; then
+            id="android"
+        fi
+        
         echo "${id:-linux}" | tr '[:upper:]' '[:lower:]'
     else
-        echo "linux"
+        # Fallback to checking via uname
+        if [[ "$(uname -o 2>/dev/null)" == *"Android"* || "$(uname -a 2>/dev/null)" == *"Android"* ]]; then
+            echo "android"
+        else
+            echo "linux"
+        fi
     fi
 }
 

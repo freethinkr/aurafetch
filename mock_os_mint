@@ -1,0 +1,5 @@
+PRETTY_NAME="Linux Mint 21.2"
+NAME="Linux Mint"
+VERSION="21.2 (Victoria)"
+ID=linuxmint
+ID_LIKE=ubuntu
