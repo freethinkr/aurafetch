@@ -33,6 +33,7 @@ source "${LIB_DIR}/system.sh"
 source "${LIB_DIR}/desktop.sh"
 source "${LIB_DIR}/hardware.sh"
 source "${LIB_DIR}/network.sh"
+source "${LIB_DIR}/ascii_text.sh"
 source "${LIB_DIR}/render.sh"
 
 # ── Default settings ────────────────────────────────────────
