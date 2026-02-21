@@ -39,14 +39,14 @@ render_section_header() {
     for ((i=0; i<sep_len; i++)); do
         sep+="─"
     done
-    echo -e "${T_HEADER}  ┌── ${icon} ${title} ${T_DIM}${sep}${RST}"
+    echo -e "${T_HEADER}  ┌── ${icon} ${title} ${sep}${RST}"
 }
 
 # ── Format a key-value line ──────────────────────────────────
 render_kv() {
     local key="$1" value="$2"
     # ASCII style label with box character prefix
-    local prefix="${T_DIM} │ ${RST}${T_DOT}▸${RST}"
+    local prefix="${T_HEADER} │ ${RST}${T_DOT}▸${RST}"
     printf " %s ${T_LABEL}%-12s${RST} ${T_VALUE}%s${RST}\n" "$prefix" "$key" "$value"
 }
 
