@@ -34,7 +34,7 @@
 ## 🚀 Installation
 
 ```bash
-git clone https://github.com/sourav/aurafetch.git
+git clone https://github.com/freethinkr/aurafetch.git
 cd aurafetch
 sudo ./install.sh
 ```
