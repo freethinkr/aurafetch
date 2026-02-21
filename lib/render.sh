@@ -84,15 +84,13 @@ render_title() {
 build_info_lines() {
     local -n _result=$1
 
-    # ASCII Art Username
+    # ASCII Art Username@Hostname
     local ascii_lines=()
-    render_ascii_text "$INFO_USER" ascii_lines
+    render_ascii_text "${INFO_USER}@${INFO_HOSTNAME}" ascii_lines
     for al in "${ascii_lines[@]}"; do
         _result+=("$(echo -e "${T_TITLE}${al}${RST}")")
     done
     
-    # Host line
-    _result+=("$(echo -e "  ${T_TITLE}  ✦  ${BOLD}${INFO_USER}${RST}${T_DIM}@${RST}${T_TITLE}${INFO_HOSTNAME}  ✦${RST}")")
     _result+=("$(echo -e "  ${T_DIM}  --------------------------------${RST}")")
     _result+=("")
 

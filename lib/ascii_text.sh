@@ -37,7 +37,21 @@ render_ascii_text() {
             Y) line1+=" █ █ "; line2+="  █  "; line3+="  ▀  " ;;
             Z) line1+=" ▀▀█ "; line2+="  █  "; line3+=" █▀▀ " ;;
             " ") line1+="     "; line2+="     "; line3+="     " ;;
-            *) line1+="  ?  "; line2+="  ?  "; line3+="  ?  " ;;
+            1) line1+=" ▄█  "; line2+="  █  "; line3+=" ▄█▄ " ;;
+            2) line1+=" ▀▀█ "; line2+=" █▀▀ "; line3+=" ▀▀▀ " ;;
+            3) line1+=" ▀▀█ "; line2+="  ▀█ "; line3+=" ▀▀▀ " ;;
+            4) line1+=" █ █ "; line2+=" ▀▀█ "; line3+="   █ " ;;
+            5) line1+=" █▀▀ "; line2+=" ▀▀█ "; line3+=" ▀▀▀ " ;;
+            6) line1+=" █▀▀ "; line2+=" █▀█ "; line3+=" ▀▀▀ " ;;
+            7) line1+=" ▀▀█ "; line2+="   █ "; line3+="   ▀ " ;;
+            8) line1+=" █▀█ "; line2+=" █▀█ "; line3+=" ▀▀▀ " ;;
+            9) line1+=" █▀█ "; line2+=" ▀▀█ "; line3+=" ▀▀▀ " ;;
+            0) line1+=" █▀█ "; line2+=" █ █ "; line3+=" ▀▀▀ " ;;
+            "@") line1+=" ▄▀▀ "; line2+=" █ ▀ "; line3+=" ▀▀▀ " ;;
+            "-") line1+="     "; line2+=" ▀▀▀ "; line3+="     " ;;
+            "_") line1+="     "; line2+="     "; line3+=" ▀▀▀ " ;;
+            ".") line1+="     "; line2+="     "; line3+="  ▀  " ;;
+            *) line1+="  ▄  "; line2+=" ▄█▄ "; line3+="  ▀  " ;;
         esac
     done
 
