@@ -81,6 +81,7 @@ build_info_lines() {
 
     # ── System Section ────────────
     _result+=("$(render_section_header "SYSTEM" "◈")")
+    _result+=("$(render_kv "User" "$INFO_USER")")
     _result+=("$(render_kv "OS" "$INFO_OS")")
     _result+=("$(render_kv "Kernel" "$INFO_KERNEL")")
     _result+=("$(render_kv "Uptime" "$INFO_UPTIME")")
@@ -122,26 +123,6 @@ build_info_lines() {
 render_output() {
     local logo_file="$1"
     local show_logo="$2"
-
-    # ── ASCII Header (Top-aligned) ──────────────────────────
-    local ascii_user=()
-    local ascii_host=()
-    render_ascii_text "${INFO_USER}" ascii_user
-    render_ascii_text "${INFO_HOSTNAME}" ascii_host
-    
-    local separator_lines=(
-        "   "
-        " ✦ "
-        " ✦ "
-        "   "
-    )
-
-    local margin="  "
-    echo ""
-    for i in 0 1 2 3; do
-        echo -e "${margin}${T_TITLE}${ascii_user[$i]}${RST}${T_DIM}${separator_lines[$i]}${RST}${T_TITLE}${ascii_host[$i]}${RST}"
-    done
-    echo ""
 
     # Build info lines
     local info_lines=()
