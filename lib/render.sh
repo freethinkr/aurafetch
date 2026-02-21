@@ -84,24 +84,7 @@ render_title() {
 build_info_lines() {
     local -n _result=$1
 
-    # ASCII Art Username and Hostname
-    local ascii_user=()
-    local ascii_host=()
-    render_ascii_text "${INFO_USER}" ascii_user
-    render_ascii_text "${INFO_HOSTNAME}" ascii_host
-    
-    local separator_lines=(
-        "   "
-        " ✦ "
-        " ✦ "
-        "   "
-    )
-
-    for i in 0 1 2 3; do
-        _result+=("$(echo -e "${T_TITLE}${ascii_user[$i]}${RST}${T_DIM}${separator_lines[$i]}${RST}${T_TITLE}${ascii_host[$i]}${RST}")")
-    done
-    
-    _result+=("")
+    # (ASCII header moved to render_output for better alignment)
 
     # ── System Section ────────────
     _result+=("$(render_section_header "SYSTEM" "◈")")
@@ -146,6 +129,25 @@ build_info_lines() {
 render_output() {
     local logo_file="$1"
     local show_logo="$2"
+
+    # ── ASCII Header (Top-aligned) ──────────────────────────
+    local ascii_user=()
+    local ascii_host=()
+    render_ascii_text "${INFO_USER}" ascii_user
+    render_ascii_text "${INFO_HOSTNAME}" ascii_host
+    
+    local separator_lines=(
+        "   "
+        " ✦ "
+        "   "
+    )
+
+    local margin="  "
+    echo ""
+    for i in 0 1 2; do
+        echo -e "${margin}${T_TITLE}${ascii_user[$i]}${RST}${T_DIM}${separator_lines[$i]}${RST}${T_TITLE}${ascii_host[$i]}${RST}"
+    done
+    echo ""
 
     # Build info lines
     local info_lines=()
