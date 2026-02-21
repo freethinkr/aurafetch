@@ -37,24 +37,17 @@ render_section_header() {
     local sep_len=30
     local sep=""
     for ((i=0; i<sep_len; i++)); do
-        if ((i < 5)); then
-            sep+="━"
-        elif ((i < 10)); then
-            sep+="─"
-        elif ((i < 20)); then
-            sep+="╌"
-        else
-            sep+="·"
-        fi
+        sep+="─"
     done
-    echo -e "${T_HEADER}  ${icon}  ${title} ${T_DIM}${sep}${RST}"
+    echo -e "${T_HEADER}  ┌── ${icon} ${title} ${T_DIM}${sep}${RST}"
 }
 
 # ── Format a key-value line ──────────────────────────────────
 render_kv() {
     local key="$1" value="$2"
-    local dot="${T_DOT}▸${RST}"
-    printf "    ${dot} ${T_LABEL}%-12s${RST} ${T_VALUE}%s${RST}\n" "$key" "$value"
+    # ASCII style label with box character prefix
+    local prefix="${T_DIM} │ ${RST}${T_DOT}▸${RST}"
+    printf " %s ${T_LABEL}%-12s${RST} ${T_VALUE}%s${RST}\n" "$prefix" "$key" "$value"
 }
 
 # ── Render the color palette ─────────────────────────────────
