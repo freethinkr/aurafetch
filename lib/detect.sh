@@ -24,6 +24,14 @@ get_distro_id() {
         if [[ "$id" == "termux" ]]; then
             id="android"
         fi
+
+        # ── Ubuntu Flavor Refinement ───────────────────────
+        if [[ "$id" == "ubuntu" ]]; then
+            # Check for KDE/Plasma to identify Kubuntu
+            if [[ "$XDG_CURRENT_DESKTOP" == *"KDE"* || "$XDG_CURRENT_DESKTOP" == *"Plasma"* ]]; then
+                id="kubuntu"
+            fi
+        fi
         
         echo "${id:-linux}" | tr '[:upper:]' '[:lower:]'
     else

@@ -47,7 +47,12 @@ set_theme_colors() {
             T_ACCENT="${C_BCYAN}"; T_LABEL="${C_BCYAN}"; T_HEADER="${BOLD}${C_BCYAN}"
             T_DOT="${C_BCYAN}"; T_TITLE="${BOLD}${C_BCYAN}"
             ;;
-        ubuntu|kubuntu|lubuntu|xubuntu|ubuntu_mate|ubuntu_budgie)
+        kubuntu)
+            LOGO_C1="${C_BBLUE}"; LOGO_C2="${C_BWHITE}"
+            T_ACCENT="${C_BBLUE}"; T_LABEL="${C_BBLUE}"; T_HEADER="${BOLD}${C_BBLUE}"
+            T_DOT="${C_BBLUE}"; T_TITLE="${BOLD}${C_BBLUE}"
+            ;;
+        ubuntu|lubuntu|xubuntu|ubuntu_mate|ubuntu_budgie)
             LOGO_C1="${C_BRED}"; LOGO_C2="${C_BWHITE}"
             T_ACCENT="${C_BRED}"; T_LABEL="${C_BRED}"; T_HEADER="${BOLD}${C_BRED}"
             T_DOT="${C_BRED}"; T_TITLE="${BOLD}${C_BRED}"
