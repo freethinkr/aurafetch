@@ -23,7 +23,7 @@ TUXEOF
         return
     fi
 
-    while IFS= read -r line; do
+    while IFS= read -r line || [[ -n "$line" ]]; do
         line="${line//\$1/${c1}}"
         line="${line//\$2/${c2}}"
         echo -e "${line}${RST}"
@@ -140,7 +140,7 @@ render_output() {
 
     # Load logo into array
     local logo_lines=()
-    while IFS= read -r line; do
+    while IFS= read -r line || [[ -n "$line" ]]; do
         logo_lines+=("$line")
     done < <(load_logo "$logo_file")
 
