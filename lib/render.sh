@@ -139,12 +139,13 @@ render_output() {
     local separator_lines=(
         "   "
         " ✦ "
+        " ✦ "
         "   "
     )
 
     local margin="  "
     echo ""
-    for i in 0 1 2; do
+    for i in 0 1 2 3; do
         echo -e "${margin}${T_TITLE}${ascii_user[$i]}${RST}${T_DIM}${separator_lines[$i]}${RST}${T_TITLE}${ascii_host[$i]}${RST}"
     done
     echo ""
